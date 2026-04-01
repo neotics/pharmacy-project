@@ -8,6 +8,7 @@ import { useLanguage } from "../context/LanguageContext";
 import { createPatient, fetchPatients } from "../services/patientService";
 import {
   createPrescription,
+  fetchPrescriptionById,
   fetchPrescriptions,
 } from "../services/prescriptionService";
 import { extractApiError } from "../utils/format";
@@ -42,6 +43,8 @@ const DoctorDashboard = () => {
   const [feedback, setFeedback] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [loadingSelectedPrescription, setLoadingSelectedPrescription] =
+    useState(false);
   const [savingPatient, setSavingPatient] = useState(false);
   const [savingPrescription, setSavingPrescription] = useState(false);
 
@@ -131,6 +134,20 @@ const DoctorDashboard = () => {
       setError(extractApiError(requestError));
     } finally {
       setSavingPrescription(false);
+    }
+  };
+
+  const handleShowQr = async (prescriptionId) => {
+    setError("");
+    setLoadingSelectedPrescription(true);
+
+    try {
+      const response = await fetchPrescriptionById(prescriptionId);
+      setSelectedPrescription(response.prescription);
+    } catch (requestError) {
+      setError(extractApiError(requestError));
+    } finally {
+      setLoadingSelectedPrescription(false);
     }
   };
 
@@ -288,10 +305,11 @@ const DoctorDashboard = () => {
             showToken
           />
         ) : (
-          <p className="empty-state">
-            {t("noPrescriptionYet")}
-          </p>
+          <p className="empty-state">{t("noPrescriptionYet")}</p>
         )}
+        {loadingSelectedPrescription ? (
+          <p className="empty-state">{t("loadingDashboard")}</p>
+        ) : null}
       </SectionCard>
 
       <SectionCard
@@ -320,7 +338,7 @@ const DoctorDashboard = () => {
                 actions={
                   <button
                     className="button button-ghost"
-                    onClick={() => setSelectedPrescription(prescription)}
+                    onClick={() => handleShowQr(prescription._id)}
                     type="button"
                   >
                     {t("showQr")}
