@@ -7,9 +7,36 @@ import apiRoutes from "./routes/index.js";
 
 const app = express();
 
+const isAllowedOrigin = (origin) => {
+  const allowedOrigins = new Set([
+    env.clientUrl,
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "http://localhost:5175",
+  ]);
+
+  if (allowedOrigins.has(origin)) {
+    return true;
+  }
+
+  try {
+    const { hostname, protocol } = new URL(origin);
+    return protocol === "https:" && hostname.endsWith(".netlify.app");
+  } catch {
+    return false;
+  }
+};
+
 app.use(
   cors({
-    origin: env.clientUrl,
+    origin(origin, callback) {
+      if (!origin || isAllowedOrigin(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
     credentials: true,
   })
 );
@@ -26,4 +53,3 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 export default app;
-
