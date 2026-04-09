@@ -19,8 +19,8 @@ export const validateRegisterPayload = (payload = {}) => {
     throw new ApiError(400, "Invalid role supplied.");
   }
 
-  if (password.length < 6) {
-    throw new ApiError(400, "Password must be at least 6 characters long.");
+  if (password.length < 5) {
+    throw new ApiError(400, "Password must be at least 5 characters long.");
   }
 
   return { name, email, password, role };
@@ -123,8 +123,8 @@ export const validateAdminUserUpdatePayload = (payload = {}) => {
 export const validatePasswordResetPayload = (payload = {}) => {
   const password = normalizeString(payload.password);
 
-  if (password.length < 6) {
-    throw new ApiError(400, "Password must be at least 6 characters long.");
+  if (password.length < 5) {
+    throw new ApiError(400, "Password must be at least 5 characters long.");
   }
 
   return { password };

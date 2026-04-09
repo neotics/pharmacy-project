@@ -103,7 +103,7 @@ const RegisterPage = () => {
                   password: event.target.value,
                 }))
               }
-              placeholder="At least 6 characters"
+              placeholder="At least 5 characters"
               type="password"
               value={form.password}
             />
