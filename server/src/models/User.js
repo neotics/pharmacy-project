@@ -1,6 +1,8 @@
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
 
+const userRoles = ["admin", "doctor", "pharmacy", "patient"];
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -22,8 +24,30 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["doctor", "pharmacy", "patient"],
+      enum: userRoles,
       required: true,
+    },
+    status: {
+      type: String,
+      enum: ["active", "blocked"],
+      default: "active",
+      index: true,
+    },
+    isApproved: {
+      type: Boolean,
+      default() {
+        return ["admin", "patient"].includes(this.role);
+      },
+      index: true,
+    },
+    approvedAt: {
+      type: Date,
+      default: null,
+    },
+    approvedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
     },
   },
   {
@@ -54,4 +78,4 @@ userSchema.methods.toJSON = function toJSON() {
 const User = mongoose.model("User", userSchema);
 
 export default User;
-
+export { userRoles };

@@ -1,6 +1,11 @@
 import Patient from "../models/Patient.js";
 import User from "../models/User.js";
-import { sanitizeUser, signAccessToken } from "../services/authService.js";
+import { createAuditLog } from "../services/auditLogService.js";
+import {
+  ensureUserCanAccessApp,
+  sanitizeUser,
+  signAccessToken,
+} from "../services/authService.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import ApiError from "../utils/ApiError.js";
 import {
@@ -30,10 +35,25 @@ export const register = asyncHandler(async (req, res) => {
     );
   }
 
+  await createAuditLog({
+    actor: user,
+    action: "auth.register",
+    entityType: "user",
+    entityId: user._id,
+    message: `User registered with role ${user.role}.`,
+    metadata: {
+      email: user.email,
+      requiresApproval: ["doctor", "pharmacy"].includes(user.role),
+    },
+  });
+
   const token = signAccessToken(user);
 
   res.status(201).json({
-    message: "User registered successfully.",
+    message:
+      user.role === "doctor" || user.role === "pharmacy"
+        ? "User registered successfully. Waiting for admin approval."
+        : "User registered successfully.",
     user: sanitizeUser(user),
     token,
   });
@@ -47,7 +67,17 @@ export const login = asyncHandler(async (req, res) => {
     throw new ApiError(401, "Invalid email or password.");
   }
 
+  ensureUserCanAccessApp(user);
+
   const token = signAccessToken(user);
+
+  await createAuditLog({
+    actor: user,
+    action: "auth.login",
+    entityType: "user",
+    entityId: user._id,
+    message: `User logged in as ${user.role}.`,
+  });
 
   res.json({
     message: "Login successful.",
@@ -57,8 +87,9 @@ export const login = asyncHandler(async (req, res) => {
 });
 
 export const getMe = asyncHandler(async (req, res) => {
+  ensureUserCanAccessApp(req.user);
+
   res.json({
     user: sanitizeUser(req.user),
   });
 });
-

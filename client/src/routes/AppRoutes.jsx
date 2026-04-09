@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 
 import ProtectedRoute from "../components/ProtectedRoute";
 import { useAuth } from "../context/AuthContext";
+import AdminDashboard from "../pages/AdminDashboard";
 import DoctorDashboard from "../pages/DoctorDashboard";
 import LoginPage from "../pages/LoginPage";
 import NotFoundPage from "../pages/NotFoundPage";
@@ -26,6 +27,10 @@ const AppRoutes = () => {
         path="/register"
       />
 
+      <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
+        <Route element={<AdminDashboard />} path="/admin" />
+      </Route>
+
       <Route element={<ProtectedRoute allowedRoles={["doctor"]} />}>
         <Route element={<DoctorDashboard />} path="/doctor" />
       </Route>
@@ -44,4 +49,3 @@ const AppRoutes = () => {
 };
 
 export default AppRoutes;
-

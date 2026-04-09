@@ -4,6 +4,7 @@ import { env } from "../config/env.js";
 import User from "../models/User.js";
 import ApiError from "../utils/ApiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
+import { ensureUserCanAccessApp } from "../services/authService.js";
 
 const readBearerToken = (authorizationHeader = "") => {
   if (!authorizationHeader.startsWith("Bearer ")) {
@@ -34,6 +35,7 @@ export const requireAuth = asyncHandler(async (req, _res, next) => {
     throw new ApiError(401, "User for this token was not found.");
   }
 
+  ensureUserCanAccessApp(user);
   req.user = user;
   next();
 });
@@ -48,4 +50,3 @@ export const authorizeRoles =
 
     next();
   };
-

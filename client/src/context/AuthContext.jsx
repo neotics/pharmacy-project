@@ -82,7 +82,15 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (payload) => {
     const response = await authService.register(payload);
-    return saveSession(response);
+
+    if (["doctor", "pharmacy"].includes(response.user.role) && !response.user.isApproved) {
+      clearStoredSession();
+      setSession(null);
+      return response;
+    }
+
+    saveSession(response);
+    return response;
   };
 
   const logout = () => {

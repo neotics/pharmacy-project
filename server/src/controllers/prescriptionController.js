@@ -1,5 +1,6 @@
 import Medication from "../models/Medication.js";
 import Prescription from "../models/Prescription.js";
+import { createAuditLog } from "../services/auditLogService.js";
 import { resolveDoctorPatient } from "../services/patientService.js";
 import {
   attachMedications,
@@ -31,6 +32,10 @@ const getPopulatedPrescription = async (prescriptionId) => {
 };
 
 const assertCanAccessPrescription = async (user, prescription) => {
+  if (user.role === "admin") {
+    return;
+  }
+
   if (user.role === "pharmacy") {
     return;
   }
@@ -84,6 +89,18 @@ export const createPrescription = asyncHandler(async (req, res) => {
   );
 
   const fullPrescription = await getPopulatedPrescription(prescription._id);
+
+  await createAuditLog({
+    actor: req.user,
+    action: "prescription.created",
+    entityType: "prescription",
+    entityId: prescription._id,
+    message: `Doctor created prescription ${prescription._id.toString()}.`,
+    metadata: {
+      patientId: patient._id.toString(),
+      medicationCount: payload.medications.length,
+    },
+  });
 
   res.status(201).json({
     message: "Prescription created successfully.",
@@ -144,6 +161,14 @@ export const verifyPrescription = asyncHandler(async (req, res) => {
     throw new ApiError(409, "This prescription has already been used.");
   }
 
+  await createAuditLog({
+    actor: req.user,
+    action: "prescription.verified",
+    entityType: "prescription",
+    entityId: prescription._id,
+    message: `Prescription ${prescription._id.toString()} verified by pharmacy.`,
+  });
+
   res.json({
     message: "Prescription verified successfully.",
     prescription: enrichedPrescription,
@@ -170,9 +195,19 @@ export const usePrescription = asyncHandler(async (req, res) => {
 
   const enrichedPrescription = await getPopulatedPrescription(prescription._id);
 
+  await createAuditLog({
+    actor: req.user,
+    action: "prescription.used",
+    entityType: "prescription",
+    entityId: prescription._id,
+    message: `Prescription ${prescription._id.toString()} was marked as used.`,
+    metadata: {
+      usedAt: prescription.usedAt,
+    },
+  });
+
   res.json({
     message: "Prescription marked as used.",
     prescription: enrichedPrescription,
   });
 });
-

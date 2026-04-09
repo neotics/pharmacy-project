@@ -10,6 +10,10 @@ export const formatDate = (value) => {
 };
 
 export const getHomeRouteForRole = (role) => {
+  if (role === "admin") {
+    return "/admin";
+  }
+
   if (role === "doctor") {
     return "/doctor";
   }
@@ -23,12 +27,14 @@ export const getHomeRouteForRole = (role) => {
 
 export const getRoleLabel = (role, t = null) => {
   const labels = t
-    ? {
+      ? {
+        admin: t("roleAdmin"),
         doctor: t("roleDoctor"),
         pharmacy: t("rolePharmacy"),
         patient: t("rolePatient"),
       }
     : {
+        admin: "Admin",
         doctor: "Doctor",
         pharmacy: "Pharmacy",
         patient: "Patient",

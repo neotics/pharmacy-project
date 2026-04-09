@@ -17,15 +17,29 @@ const RegisterPage = () => {
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [feedback, setFeedback] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
+    setFeedback("");
     setSubmitting(true);
 
     try {
-      const session = await register(form);
-      navigate(getHomeRouteForRole(session.user.role), { replace: true });
+      const response = await register(form);
+
+      if (["doctor", "pharmacy"].includes(response.user.role) && !response.user.isApproved) {
+        setFeedback(response.message);
+        setForm({
+          name: "",
+          email: "",
+          password: "",
+          role: "doctor",
+        });
+        return;
+      }
+
+      navigate(getHomeRouteForRole(response.user.role), { replace: true });
     } catch (requestError) {
       setError(extractApiError(requestError));
     } finally {
@@ -112,6 +126,7 @@ const RegisterPage = () => {
             </select>
           </label>
 
+          {feedback ? <p className="form-success">{feedback}</p> : null}
           {error ? <p className="form-error">{error}</p> : null}
 
           <button className="button" disabled={submitting} type="submit">

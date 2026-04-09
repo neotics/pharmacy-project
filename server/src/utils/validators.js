@@ -99,3 +99,33 @@ export const validatePrescriptionTokenPayload = (payload = {}) => {
   return { token };
 };
 
+export const validateAdminUserUpdatePayload = (payload = {}) => {
+  const role = payload.role ? normalizeString(payload.role) : undefined;
+  const status = payload.status ? normalizeString(payload.status) : undefined;
+  const isApproved =
+    typeof payload.isApproved === "boolean" ? payload.isApproved : undefined;
+
+  if (!role && !status && typeof isApproved === "undefined") {
+    throw new ApiError(400, "At least one user field must be provided.");
+  }
+
+  if (role && !["doctor", "pharmacy", "patient"].includes(role)) {
+    throw new ApiError(400, "Invalid role supplied.");
+  }
+
+  if (status && !["active", "blocked"].includes(status)) {
+    throw new ApiError(400, "Invalid status supplied.");
+  }
+
+  return { role, status, isApproved };
+};
+
+export const validatePasswordResetPayload = (payload = {}) => {
+  const password = normalizeString(payload.password);
+
+  if (password.length < 6) {
+    throw new ApiError(400, "Password must be at least 6 characters long.");
+  }
+
+  return { password };
+};

@@ -57,8 +57,8 @@ const LoginPage = () => {
                   email: event.target.value,
                 }))
               }
-              placeholder="doctor@clinic.uz"
-              type="email"
+              placeholder="doctor@clinic.uz / seva"
+              type="text"
               value={form.email}
             />
           </label>
