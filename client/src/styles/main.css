@@ -519,25 +519,84 @@ textarea:focus {
   top: 1rem;
   right: 1rem;
   z-index: 60;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 0.4rem 0.8rem;
-  backdrop-filter: blur(8px);
-}
-
-.language-switcher label {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.85rem;
-  color: var(--text-muted);
+  gap: 0.7rem;
+  max-width: calc(100vw - 2rem);
+  background: rgba(255, 253, 248, 0.92);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.45rem 0.5rem 0.45rem 0.9rem;
+  box-shadow: 0 16px 42px rgba(21, 51, 45, 0.12);
+  backdrop-filter: blur(12px);
 }
 
-.language-switcher select {
-  border: 1px solid var(--line);
+.language-switcher-label {
+  white-space: nowrap;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.language-switcher-options {
+  display: inline-flex;
+  gap: 0.3rem;
+  padding: 0.2rem;
+  background: rgba(25, 51, 44, 0.06);
   border-radius: 999px;
-  padding: 0.2rem 0.6rem;
-  background: #fff;
-  color: var(--text-main);
+}
+
+.language-switcher-button {
+  min-width: 3rem;
+  border: none;
+  border-radius: 999px;
+  padding: 0.5rem 0.75rem;
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  transition:
+    background 150ms ease,
+    color 150ms ease,
+    transform 150ms ease;
+}
+
+.language-switcher-button:hover {
+  background: rgba(30, 125, 104, 0.1);
+}
+
+.language-switcher-button.is-active {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
+  color: white;
+}
+
+.language-switcher-button:focus-visible {
+  outline: 3px solid rgba(30, 125, 104, 0.2);
+  outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  .language-switcher {
+    left: 0.5rem;
+    right: 0.5rem;
+    top: 0.5rem;
+    justify-content: space-between;
+    border-radius: 20px;
+    padding: 0.5rem;
+  }
+
+  .language-switcher-label {
+    font-size: 0.78rem;
+  }
+
+  .language-switcher-options {
+    width: auto;
+    max-width: 100%;
+  }
+
+  .language-switcher-button {
+    min-width: 2.65rem;
+    padding-inline: 0.7rem;
+  }
 }

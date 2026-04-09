@@ -36,12 +36,9 @@ const RegisterPage = () => {
   return (
     <div className="auth-shell">
       <section className="auth-aside">
-        <p className="eyebrow">Role-based access</p>
-        <h1>Create your account</h1>
-        <p>
-          Patient rolida ro'yxatdan o'tsangiz, doctor kiritgan email bilan mos
-          kelishi retseptlarni avtomatik bog'lashga yordam beradi.
-        </p>
+        <p className="eyebrow">{t("registerHeroEyebrow")}</p>
+        <h1>{t("registerHeroTitle")}</h1>
+        <p>{t("registerHeroDescription")}</p>
       </section>
 
       <section className="auth-card">

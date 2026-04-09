@@ -34,12 +34,9 @@ const LoginPage = () => {
   return (
     <div className="auth-shell">
       <section className="auth-aside">
-        <p className="eyebrow">Paperless workflow</p>
-        <h1>Elektron retseptlar tizimi</h1>
-        <p>
-          Doctor retsept yaratadi, patient QR oladi, pharmacy esa uni tez
-          tekshiradi va qayta ishlatishni bloklaydi.
-        </p>
+        <p className="eyebrow">{t("loginHeroEyebrow")}</p>
+        <h1>{t("loginHeroTitle")}</h1>
+        <p>{t("loginHeroDescription")}</p>
       </section>
 
       <section className="auth-card">
