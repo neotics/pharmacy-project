@@ -68,7 +68,7 @@ p {
 .auth-shell {
   width: min(1180px, calc(100vw - 2rem));
   margin: 0 auto;
-  padding: 2rem 0 3rem;
+  padding: 5.5rem 0 3rem;
 }
 
 .auth-shell {
@@ -132,6 +132,13 @@ p {
   display: flex;
   flex-direction: column;
   gap: 1.4rem;
+}
+
+.auth-card .button,
+.auth-card .button-secondary,
+.auth-card .button-ghost {
+  width: 100%;
+  justify-content: center;
 }
 
 .auth-link {
@@ -328,6 +335,16 @@ textarea:focus {
   margin-bottom: 0.35rem;
 }
 
+.section-heading > div,
+.hero-card > div,
+.auth-aside,
+.auth-card,
+.prescription-card,
+.medication-card,
+.stat-card {
+  min-width: 0;
+}
+
 .span-2 {
   grid-column: 1 / -1;
 }
@@ -381,6 +398,10 @@ textarea:focus {
 
 .prescription-top h3 {
   font-size: 1.35rem;
+}
+
+.prescription-top > div:first-child {
+  min-width: 0;
 }
 
 .meta-grid {
@@ -467,11 +488,29 @@ textarea:focus {
 }
 
 @media (max-width: 960px) {
+  .page-shell,
+  .auth-shell {
+    width: min(100vw - 1.5rem, 100%);
+    padding-top: 6.25rem;
+  }
+
   .auth-shell,
   .hero-card,
   .dashboard-grid,
   .stats-grid {
     grid-template-columns: 1fr;
+  }
+
+  .auth-shell {
+    min-height: auto;
+  }
+
+  .auth-aside {
+    min-height: 0;
+  }
+
+  .hero-panel {
+    padding: 1.1rem;
   }
 
   .form-grid,
@@ -488,7 +527,7 @@ textarea:focus {
   .page-shell,
   .auth-shell {
     width: min(100vw - 1rem, 100%);
-    padding: 1rem 0 2rem;
+    padding: 5.75rem 0 1.5rem;
   }
 
   .auth-aside,
@@ -498,6 +537,77 @@ textarea:focus {
   .screen-card {
     padding: 1.15rem;
     border-radius: 22px;
+  }
+
+  .auth-shell {
+    gap: 1rem;
+  }
+
+  .auth-aside,
+  .auth-card,
+  .section-card,
+  .screen-card,
+  .hero-card {
+    box-shadow: 0 16px 38px rgba(21, 51, 45, 0.1);
+  }
+
+  .auth-aside h1,
+  .hero-card h1,
+  .screen-card h2 {
+    font-size: clamp(1.8rem, 10vw, 2.5rem);
+    line-height: 1;
+  }
+
+  .section-heading {
+    gap: 0.65rem;
+  }
+
+  .section-heading h2 {
+    font-size: 1.35rem;
+  }
+
+  .stat-card {
+    padding: 0.95rem 1rem;
+    border-radius: 18px;
+  }
+
+  .stat-card strong {
+    font-size: 1.6rem;
+  }
+
+  .medication-card,
+  .prescription-card {
+    padding: 0.9rem;
+    border-radius: 20px;
+  }
+
+  .medication-header,
+  .prescription-top {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .prescription-top h3 {
+    font-size: 1.15rem;
+  }
+
+  .badge {
+    align-self: flex-start;
+  }
+
+  .detail-title {
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+  }
+
+  .token-box {
+    padding: 0.75rem;
+    font-size: 0.82rem;
+  }
+
+  .qr-panel {
+    padding: 0.8rem;
+    border-radius: 18px;
   }
 
   .hero-actions,
@@ -511,6 +621,11 @@ textarea:focus {
   .button-ghost {
     width: 100%;
     justify-content: center;
+  }
+
+  .button-small {
+    width: auto;
+    min-width: 0;
   }
 }
 
@@ -598,5 +713,76 @@ textarea:focus {
   .language-switcher-button {
     min-width: 2.65rem;
     padding-inline: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-shell,
+  .auth-shell {
+    width: min(100vw - 0.75rem, 100%);
+    padding-top: 6.1rem;
+  }
+
+  .auth-aside,
+  .auth-card,
+  .hero-card,
+  .section-card,
+  .screen-card {
+    padding: 1rem;
+    border-radius: 18px;
+  }
+
+  .eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+  }
+
+  input,
+  select,
+  textarea {
+    padding: 0.82rem 0.9rem;
+    border-radius: 14px;
+  }
+
+  .button {
+    padding: 0.85rem 1rem;
+  }
+
+  .meta-grid {
+    gap: 0.7rem;
+  }
+
+  .medication-preview {
+    padding: 0.7rem 0.75rem;
+    border-radius: 14px;
+  }
+
+  .empty-state,
+  .form-error,
+  .form-success {
+    padding: 0.8rem 0.85rem;
+    border-radius: 16px;
+  }
+
+  .language-switcher {
+    gap: 0.45rem;
+    padding: 0.45rem;
+  }
+
+  .language-switcher-label {
+    font-size: 0.74rem;
+  }
+
+  .language-switcher-options {
+    flex: 1;
+    justify-content: space-between;
+  }
+
+  .language-switcher-button {
+    min-width: 0;
+    flex: 1;
+    padding: 0.48rem 0.3rem;
+    font-size: 0.74rem;
+    letter-spacing: 0.05em;
   }
 }
